@@ -44,6 +44,7 @@ module ov_7670_init #(
             .tr_start(tr_start),
             .tr_end(tr_end));
 
+    (* syn_encoding = "safe" *)
     reg [1:0] state;
     reg [5:0] cmd_counter;
 
@@ -52,7 +53,7 @@ module ov_7670_init #(
                s_cmd   = 2,
                s_wait  = 3;
 
-    always @ (posedge clk or negedge reset) begin
+    always @ (posedge clk) begin
         if (~reset) begin
             state <= s_reset;
 
