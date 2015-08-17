@@ -27,9 +27,11 @@ module ov_7670_init #(
 
     reg [7:0] w_data;
     wire [7:0] r_data;
-    reg [7:0] subaddr;
 
-    reg sccb_start;
+    reg [7:0] chip_addr;
+    reg [7:0] sub_addr;
+
+    reg  sccb_start;
     wire sccb_done;
     wire sccb_busy;
 
@@ -51,12 +53,12 @@ module ov_7670_init #(
         .sio_c(sio_c),
         .sccb_e(sccb_e),
         .pwdn(pwdn),
-        .addr(CHIP_ADDR),
-        .subaddr(subaddr),
+        .addr(chip_addr),
+        .subaddr(sub_addr),
         .w_data(w_data),
         .r_data(r_data),
-        .tr_start(tr_start),
-        .tr_end(tr_end),
+        .tr_start(sccb_start),
+        .tr_end(sccb_done),
         .busy(sccb_busy)
     );
 
@@ -130,9 +132,8 @@ module ov_7670_init #(
                 end
 
                 s_wait: begin
-                    write_en <= 1'b0;
-                    read_en  <= 1'b0;
-                    state    <= tr_end ? s_iter : s_wait;
+                    sccb_start <= 1'b0;
+                    state      <= sccb_done ? s_iter : s_wait;
                 end
             endcase
         end
@@ -144,21 +145,10 @@ module ov_7670_init #(
         input [7:0] t_data;
 
         begin
-            chip_addr <= t_chip_addr & 8'b1111_1110;
-            sub_addr  <= t_sub_addr;
-            w_data    <= t_data;
-            write_en  <= 1'b1;
-        end
-    endtask
-
-    task read_sccb;
-        input [7:0] t_chip_addr;
-        input [7:0] t_sub_addr;
-
-        begin
-            chip_addr <= t_chip_addr | 8'b0000_0001;
-            sub_addr  <= t_sub_addr;
-            read_en   <= 1'b1;
+            chip_addr   <= t_chip_addr & 8'b1111_1110;
+            sub_addr    <= t_sub_addr;
+            w_data      <= t_data;
+            sccb_start  <= 1'b1;
         end
     endtask
 endmodule
