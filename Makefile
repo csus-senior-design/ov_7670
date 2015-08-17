@@ -11,7 +11,6 @@
 #
 
 TARGET := $(shell basename "$(CURDIR)")
-TB      = $(TARGET)_tb.v
 
 COMPILER = vcs
 VIEWER	 = dve
@@ -55,7 +54,7 @@ clean:
 
 # Compile using VCS
 vcs:
-	@ vcs $(VCS_OPTS) -o $(TARGET) $(TB)
+	@ vcs $(VCS_OPTS) -o $(TARGET) *.v 
 
 # Use VCS DVE to view the signals
 dve: run
@@ -64,7 +63,7 @@ dve: run
 
 # Compile using Icarus Verilog
 iverilog:
-	@ iverilog $(IVERILOG_OPTS) -o $(TARGET) -DIVERILOG $(TB)
+	@ iverilog $(IVERILOG_OPTS) -o $(TARGET) -DIVERILOG *.v 
 
 # Use GTKWave to view the signals
 gtkwave: run
