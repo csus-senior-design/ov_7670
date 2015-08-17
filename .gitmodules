@@ -1,0 +1,4 @@
+[submodule "ov_sccb"]
+	path = ov_sccb
+	url = git@github.com:csus-senior-design/ov_sccb.git
+    branch = master
