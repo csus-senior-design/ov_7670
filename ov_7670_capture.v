@@ -17,7 +17,7 @@ module ov_7670_capture(
         input vsync,
         input href,
         input [7:0] data,
-        output addr,
+        output [18:0] addr,
         output [23:0] data_out,
         output write_en
     );
