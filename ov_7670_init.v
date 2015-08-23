@@ -34,6 +34,7 @@ module ov_7670_init #(
     reg  sccb_start;
     wire sccb_done;
     wire sccb_busy;
+    wire sccb_e;
 
     (* syn_encoding = "safe" *)
     reg [2:0] state;
