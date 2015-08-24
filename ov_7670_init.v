@@ -13,7 +13,8 @@ Description:
     Performs initialization of the OV7670 Camera
 */
 module ov_7670_init #(
-        parameter CHIP_ADDR = 8'hCD
+        parameter CHIP_ADDR = 8'hCD,
+        parameter SCCB_CLKDIV = 12'd125
     ) (
         input clk,       // System clock for state transitions
         input clk_sccb,  // Clock for SCCB protocol (100kHz to 400kHz)
@@ -49,6 +50,7 @@ module ov_7670_init #(
     ov_sccb sccb (
         .clk(clk_sccb),
         .reset(reset),
+        .clk_div(SCCB_CLKDIV),
         .sio_d(sio_d),
         .sio_c(sio_c),
         .sccb_e(sccb_e),
@@ -57,8 +59,8 @@ module ov_7670_init #(
         .subaddr(sub_addr),
         .w_data(w_data),
         .r_data(r_data),
-        .tr_start(sccb_start),
-        .tr_end(sccb_done),
+        .start(sccb_start),
+        .done(sccb_done),
         .busy(sccb_busy)
     );
 
